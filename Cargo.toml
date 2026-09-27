@@ -21,7 +21,7 @@ pulldown-cmark = "0.10"
 
 # Python bindings. Only compiled when the `python` feature is enabled
 # (e.g. by maturin); a plain `cargo build`/`cargo test` does not touch it.
-pyo3 = { version = "0.22", features = ["extension-module"], optional = true }
+pyo3 = { version = "0.29", features = ["extension-module", "abi3-py39"], optional = true }
 
 [features]
 default = []
