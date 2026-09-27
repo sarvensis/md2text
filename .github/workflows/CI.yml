@@ -55,12 +55,17 @@ jobs:
           args: --release --out dist ${{ matrix.pypy && '-i 3.13 pypy3.11' || '' }}
           sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
 
+      - name: List built wheels
+        run: ls -lh dist
+
       - name: Set up Python for tests
         if: matrix.test == 'native'
         uses: actions/setup-python@v7
         with:
           python-version: |
-            pypy3.11
+            # PyPy 8.0 changed the ABI tag (pp73 -> pp80); stay on 7.3 to match
+            # the PyPy in the manylinux images, so every PyPy wheel is pp73.
+            pypy3.11-v7.3.x
             3.13
 
       - name: Smoke test (glibc, CPython + PyPy)
@@ -124,6 +129,9 @@ jobs:
           args: --release --out dist
           sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
 
+      - name: List built wheels
+        run: ls -lh dist
+
       - name: Smoke test
         shell: bash
         run: |
@@ -152,7 +160,9 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: |
-            pypy3.11
+            # PyPy 8.0 changed the ABI tag (pp73 -> pp80); stay on 7.3 to match
+            # the PyPy in the manylinux images, so every PyPy wheel is pp73.
+            pypy3.11-v7.3.x
             3.13
 
       - name: Build wheels
@@ -161,6 +171,9 @@ jobs:
           target: ${{ matrix.target }}
           args: --release --out dist -i 3.13 pypy3.11
           sccache: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
+      - name: List built wheels
+        run: ls -lh dist
 
       - name: Smoke test (CPython + PyPy)
         shell: bash
