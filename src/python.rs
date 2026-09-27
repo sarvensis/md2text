@@ -8,6 +8,15 @@ use pyo3::prelude::*;
 
 use crate::{to_plain_text, Options};
 
+/// Python spelling of a bool, so `repr()` output is valid Python.
+fn py_bool(b: bool) -> &'static str {
+    if b {
+        "True"
+    } else {
+        "False"
+    }
+}
+
 fn default_bullet() -> String {
     "- ".to_string()
 }
@@ -104,19 +113,22 @@ impl Converter {
     }
 
     fn __repr__(&self) -> String {
+        let o = &self.options;
         format!(
-            "Converter(keep_link_urls={}, keep_image_alt={}, heal_truncated={}, gfm={})",
-            self.options.keep_link_urls,
-            self.options.keep_image_alt,
-            self.options.heal_truncated,
-            self.options.gfm,
+            "Converter(keep_link_urls={}, keep_image_alt={}, list_bullet={:?}, \
+             heal_truncated={}, gfm={})",
+            py_bool(o.keep_link_urls),
+            py_bool(o.keep_image_alt),
+            o.list_bullet,
+            py_bool(o.heal_truncated),
+            py_bool(o.gfm),
         )
     }
 }
 
+/// Fast, safe Markdown -> plain text conversion (Rust core).
 #[pymodule]
 fn md2text(m: &Bound<'_, PyModule>) -> PyResult<()> {
-    m.add("__doc__", "Fast, safe Markdown -> plain text conversion (Rust core).")?;
     m.add_function(wrap_pyfunction!(to_text, m)?)?;
     m.add_class::<Converter>()?;
     Ok(())

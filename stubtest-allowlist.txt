@@ -1,0 +1,3 @@
+# Internal native submodule created by maturin; the public API is re-exported
+# from the package and covered by md2text.pyi.
+md2text.md2text
