@@ -1,0 +1,34 @@
+[package]
+name = "md2text"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.74"
+description = "Fast, safe Markdown -> plain text conversion, robust to truncated input, with Python bindings."
+license = "Apache-2.0"
+repository = "https://github.com/sarvensis/md2text"
+readme = "README.md"
+keywords = ["markdown", "plaintext", "commonmark", "streaming", "python"]
+categories = ["text-processing", "parser-implementations"]
+
+[lib]
+name = "md2text"
+# cdylib -> Python extension module; rlib -> usable as a normal Rust crate / tests.
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# CommonMark pull parser. Pinned to the 0.10.x series for a stable event API.
+pulldown-cmark = "0.10"
+
+# Python bindings. Only compiled when the `python` feature is enabled
+# (e.g. by maturin); a plain `cargo build`/`cargo test` does not touch it.
+pyo3 = { version = "0.22", features = ["extension-module"], optional = true }
+
+[features]
+default = []
+python = ["dep:pyo3"]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
