@@ -1,5 +1,8 @@
 # md2text
 
+[![PyPI](https://img.shields.io/pypi/v/md2text)](https://pypi.org/project/md2text/)
+[![CI](https://github.com/sarvensis/md2text/actions/workflows/CI.yml/badge.svg)](https://github.com/sarvensis/md2text/actions/workflows/CI.yml)
+
 A fast, safe Rust library for converting Markdown to plain text, resilient to
 truncated input, with Python bindings.
 
@@ -23,7 +26,40 @@ rules, so such text is left intact.
 - **Configurable** — links with or without URLs, image alt text, list
   markers, GFM (tables, strikethrough, task lists).
 
-## Building
+## Installation
+
+### Python
+
+```bash
+pip install md2text
+# or
+uv add md2text
+```
+
+Requires Python 3.10+. Prebuilt wheels are published for:
+
+- **Linux** (glibc): x86_64, x86, aarch64, armv7, ppc64le, s390x, riscv64
+- **Linux** (musl, e.g. Alpine): x86_64, aarch64
+- **macOS**: Intel and Apple Silicon
+- **Windows**: x64, x86, ARM64
+
+Wheels use the stable ABI (`abi3`), so a single wheel covers every CPython
+version from 3.10 up, including future releases. PyPy 3.11 (7.3.x) wheels are
+available for Linux x86_64/aarch64 and macOS.
+
+The package ships type hints (`py.typed`), so editors and type checkers see
+the full signatures.
+
+### Rust
+
+The crate is not on crates.io yet; depend on it via git:
+
+```toml
+[dependencies]
+md2text = { git = "https://github.com/sarvensis/md2text" }
+```
+
+## Building from source
 
 Rust crate:
 
@@ -121,7 +157,40 @@ flanking-делимитеров, поэтому такой текст остаё
 - **Конфигурируемо** — ссылки с URL или без, alt у картинок, маркеры списков,
   GFM (таблицы, зачёркивание, чек-листы).
 
-## Сборка
+## Установка
+
+### Python
+
+```bash
+pip install md2text
+# или
+uv add md2text
+```
+
+Нужен Python 3.10+. Готовые колёса публикуются для:
+
+- **Linux** (glibc): x86_64, x86, aarch64, armv7, ppc64le, s390x, riscv64
+- **Linux** (musl, например Alpine): x86_64, aarch64
+- **macOS**: Intel и Apple Silicon
+- **Windows**: x64, x86, ARM64
+
+Wheels собраны под стабильный ABI (`abi3`), поэтому одно колесо подходит для
+всех версий CPython начиная с 3.10, включая будущие. Wheels для PyPy 3.11
+(7.3.x) есть для Linux x86_64/aarch64 и macOS.
+
+В пакете есть аннотации типов (`py.typed`), так что редактор и тайпчекер видят
+полные сигнатуры.
+
+### Rust
+
+На crates.io крейта пока нет, подключается через git:
+
+```toml
+[dependencies]
+md2text = { git = "https://github.com/sarvensis/md2text" }
+```
+
+## Сборка из исходников
 
 Rust-крейт:
 
@@ -186,7 +255,7 @@ conv.convert(chunk)
 
 `heal_truncated` закрывает незавершённый блок ``` ``` ```, поэтому код из
 оборванного потока сохраняется как текст. Незакрытые **строчные** конструкции
-(`**жир`, незавершённый код-спан) парсер по правилам CommonMark выводит как
+(`**жирный`, незавершённый код-спан) парсер по правилам CommonMark выводит как
 обычный текст с самими символами-маркерами — это ожидаемо и не приводит к сбою.
 Главная гарантия: на любом частичном вводе функция не паникует и возвращает
 осмысленный текст.
